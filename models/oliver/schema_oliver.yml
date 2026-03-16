@@ -13,3 +13,7 @@ models:
     description: "Oliver Store Dimension"
   - name: fact_sales
     description: "Oliver Sales Fact"
+  - name: stg_employee_certifications
+    description: Staging model that extracts employee certification data from the Oliver source system and parses JSON fields into structured columns.
+  - name: fact_certification
+    description: Fact table capturing employee certifications. The grain of this table is one record per employee certification awarded on a specific date.

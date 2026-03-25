@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: ecoessentials_landing
+    database: tysonmerrill
+    schema: ECOESSENTIALS_ECOESSENTIALS_TRANSACTIONAL_DB
+    tables:
+      - name: customer
+      - name: order
+      - name: orderline
+      - name: product
+      - name: promotional_campaign
+
+  - name: ecoessentials_marketing
+    database: tysonmerrill
+    schema: ECOMARKETING
+    tables:
+      - name: marketingemails

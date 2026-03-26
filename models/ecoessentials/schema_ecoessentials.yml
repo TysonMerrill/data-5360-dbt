@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: ecoessentials_dim_customer
+    description: "Ecoessentials Customer Dimension"
+  - name: ecoessentials_dim_date
+    description: "Ecoessentials Date Dimension"
+  - name: ecoessentials_dim_email
+    description: "EEcoessentials Email Dimension"
+  - name: ecoessentials_dim_event
+    description: "Ecoessentials Event Dimension"
+  - name: ecoessentials_dim_product
+    description: "Ecoessentials Prodcut Dimension"
+  - name: ecoessentials_dim_promotion_campaign
+    description: "Ecoessentials Promotional Campaign Dimension"
+  - name: ecoessentials_dim_time
+    description: "Ecoessentials Time Dimension"
+  - name: fact_sales
+    description: Fact table capturing sales information per 
+  - name: fact_email_marketing
+    description: Fact table capturing email marketing campaigns.

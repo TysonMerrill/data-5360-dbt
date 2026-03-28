@@ -1,26 +1,14 @@
-{{ config(
-    materialized = 'table',
-    schema = 'dw_ecoessentials'
-) }}
-
-with cleaned as (
-
-    select
-        s.*,
-        try_to_number(nullif(trim(s.customerid), 'NULL')) as customerid_clean
-    from {{ source('ecoessentials_marketing', 'marketingemails') }} s
-
-)
+{{ config(materialized = 'table', schema = 'dw_ecoessentials') }}
 
 select
     e.event_key,
     em.email_key,
-    c.customer_key,
-    cam.campaign_key,
+    coalesce(c.customer_key, -1) as customer_key,
+    s.subscriberid,
     d.date_key,
     t.time_key
 
-from cleaned s
+from {{ source('ecoessentials_marketing', 'marketingemails') }} s
 
 inner join {{ ref('ecoessentials_dim_event') }} e
     on s.emaileventid = e.email_event_id
@@ -29,10 +17,7 @@ inner join {{ ref('ecoessentials_dim_email') }} em
     on s.emailid = em.email_id
 
 left join {{ ref('ecoessentials_dim_customer') }} c
-    on s.customerid_clean = c.customer_id
-
-inner join {{ ref('ecoessentials_dim_promotion_campaign') }} cam
-    on s.campaignid = cam.campaign_id
+    on try_to_number(nullif(trim(to_varchar(s.customerid)), 'NULL')) = c.customer_id
 
 inner join {{ ref('ecoessentials_dim_date') }} d
     on cast(s.eventtimestamp as date) = d.date_key

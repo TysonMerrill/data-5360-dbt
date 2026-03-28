@@ -4,7 +4,6 @@ select
     e.event_key,
     em.email_key,
     coalesce(c.customer_key, -1) as customer_key,
-    s.subscriberid,
     d.date_key,
     t.time_key
 

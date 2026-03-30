@@ -7,13 +7,49 @@ models:
     description: "Oliver Employee Dimension"
   - name: oliver_dim_date
     description: "Oliver Date Dimension"
+
+
   - name: oliver_dim_product
     description: "Oliver Product Dimension"
+    columns:
+      - name: product_key
+        tests:
+          - unique
+
+
   - name: oliver_dim_store
     description: "Oliver Store Dimension"
+
   - name: fact_sales
     description: "Oliver Sales Fact"
+    columns:
+      - name: product_key
+        description: "A foreign key to the policy dimension"
+        tests:
+          - not_null
+
   - name: stg_employee_certifications
     description: Staging model that extracts employee certification data from the Oliver source system and parses JSON fields into structured columns.
+    columns:
+      - name: certification_name
+        tests:
+          - accepted_values:
+              values:
+                - "Customer Service Excellence"
+                - "Conflict Resolution"
+                - "Product Knowledge Level 2"
+                - "Inventory Management"
+                - "Workplace Safety"
+                - "Leadership and Coaching"
+                - "Strategic Retail Operations"
+                - "Point of Sale Operations"
+                - "Cash Handling and Security"
+
   - name: fact_certification
     description: Fact table capturing employee certifications. The grain of this table is one record per employee certification awarded on a specific date.
+    columns:
+      - name: employee_key
+        tests:
+          - relationships:
+              to: ref('oliver_dim_employee') # the model you want to compare to
+              field: employee_key # the field on the model you want to compare to

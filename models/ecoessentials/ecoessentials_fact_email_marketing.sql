@@ -1,9 +1,13 @@
-{{ config(materialized = 'table', schema = 'dw_ecoessentials') }}
+-- ecoessentials_fact_marketing.sql
+{{ config(
+    materialized = 'table',
+    schema = 'dw_ecoessentials'
+) }}
 
 select
     e.event_key,
     em.email_key,
-    coalesce(c.customer_key, -1) as customer_key,
+    c.customer_key,
     d.date_key,
     t.time_key
 
@@ -15,8 +19,9 @@ inner join {{ ref('ecoessentials_dim_event') }} e
 inner join {{ ref('ecoessentials_dim_email') }} em
     on s.emailid = em.email_id
 
-left join {{ ref('ecoessentials_dim_customer') }} c
-    on try_to_number(nullif(trim(to_varchar(s.customerid)), 'NULL')) = c.customer_id
+inner join {{ ref('ecoessentials_dim_customer') }} c
+    on c.firstname = s.subscriberfirstname
+   and c.lastname = s.subscriberlastname
 
 inner join {{ ref('ecoessentials_dim_date') }} d
     on cast(s.eventtimestamp as date) = d.date_key

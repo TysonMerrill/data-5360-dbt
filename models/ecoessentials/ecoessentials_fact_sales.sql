@@ -21,9 +21,12 @@ inner join {{ source('ecoessentials_landing', 'product') }} prod
     on ol.product_id = prod.product_id
 inner join {{ source('ecoessentials_landing', 'promotional_campaign') }} pc
     on ol.campaign_id = pc.campaign_id
+inner join {{ source('ecoessentials_landing', 'customer')}} cs
+    on o.customer_id = cs.customer_id
 -- dimension joins 
 inner join {{ ref('ecoessentials_dim_customer') }} c
-    on o.customer_id = c.customer_id
+    on c.firstname = cs.customer_first_name
+    and c.lastname = cs.customer_last_name
 inner join {{ ref('ecoessentials_dim_product') }} p
     on prod.product_id = p.product_id
 inner join {{ ref('ecoessentials_dim_promotion_campaign') }} cam

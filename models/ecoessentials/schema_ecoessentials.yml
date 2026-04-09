@@ -1,21 +1,81 @@
 version: 2
 
 models:
-  - name: ecoessentials_dim_customer
-    description: "Ecoessentials Customer Dimension"
-  - name: ecoessentials_dim_date
-    description: "Ecoessentials Date Dimension"
-  - name: ecoessentials_dim_email
-    description: "Ecoessentials Email Dimension"
   - name: ecoessentials_dim_event
     description: "Ecoessentials Event Dimension"
+    columns:
+      - name: event_key
+        tests:
+          - not_null
+
+  - name: ecoessentials_dim_customer
+    description: "Ecoessentials Customer Dimension"
+    columns:
+      - name: customer_key
+        tests: 
+          - unique
+          
+  - name: ecoessentials_dim_date
+    description: "Ecoessentials Date Dimension"
+    columns: 
+      - name: day_of_week
+        tests: 
+          - accepted_values:
+              values:
+                - "1"
+                - "2"
+                - "3"
+                - "4"
+                - "5"
+                - "6"
+                - "7"
+  
+  - name: ecoessentials_dim_email
+    description: "Ecoessentials Email Dimension"
+    columns:
+      - name: email_name
+        tests:
+          - not_null
+
   - name: ecoessentials_dim_product
-    description: "Ecoessentials Prodcut Dimension"
+    description: "Ecoessentials product Dimension"
+    columns:
+      - name: product_key
+        tests:
+          - not_null
+
   - name: ecoessentials_dim_promotion_campaign
     description: "Ecoessentials Promotional Campaign Dimension"
+    columns:
+      - name: campaign_key
+        tests: 
+          - unique
+
   - name: ecoessentials_dim_time
     description: "Ecoessentials Time Dimension"
+    columns:
+      - name: time_of_day_period
+        tests:
+          - accepted_values:
+              values:
+                - "Morning"
+                - "Afternoon"
+                - "Evening"
+
   - name: ecoessentials_fact_sales
     description: Fact table capturing sales information per 
-  - name: fact_email_marketing
+    columns:
+      - name: product_key
+        tests:
+          - relationships:
+              to: ref('ecoessentials_dim_product') # the model you want to compare to
+              field: product_key # the field on the model you want to compare to
+
+  - name: ecoessentials_fact_email_marketing
     description: Fact table capturing email marketing campaigns.
+    columns:
+    - name: event_key
+      tests:
+        - relationships:
+            to: ref('ecoessentials_dim_event')
+            field: event_key
